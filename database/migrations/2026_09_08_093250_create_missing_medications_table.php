@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId("tenant_id")->constrained("tenants")->cascadeOnDelete();
             $table->string("name");
             $table->enum("status" , ["Missing" , "Ordered" , "Being Delivered" , "Delivered"])->default("Missing");
-            $table->foreignId("created_by")->constrained("users")->nullOnDelete();
+            $table->foreignId("created_by")->nullable()->constrained("users")->nullOnDelete();
             $table->timestamps();
         });
     }
