@@ -58,7 +58,7 @@
         {{ __("custom.Missing Medications") }}
       </a>
       
-      <a href="{{ route("admin.users.index") }}" class="nav-item {{ request()->is('admin/users*') ? "active" : "" }} flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium">
+      <a href="{{ route("users.index") }}" class="nav-item {{ request()->is('users*') ? "active" : "" }} flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium">
         <span class="dot w-1.5 h-1.5 rounded-full bg-transparent"></span>
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 19c.8-3.2 3-4.8 5.5-4.8s4.7 1.6 5.5 4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="17.5" cy="9" r="2.4" stroke="currentColor" stroke-width="1.7"/><path d="M15.8 14.6c1.9.3 3.3 1.7 3.9 4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         {{ __("custom.Users") }}

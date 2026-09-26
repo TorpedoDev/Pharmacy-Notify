@@ -9,6 +9,7 @@ use App\Http\Controllers\User\PatientController;
 use App\Http\Controllers\User\PatientTreatmentController;
 use App\Http\Controllers\User\PrescriptionController;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\UsersController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -46,7 +47,9 @@ Route::middleware(['auth' , 'locale'])->group(function () {
     Route::get("profile" , [ProfileController::class, "index"])->name("profile.index");
     Route::put("profile/update" , [ProfileController::class, "updateInformation"])->name("profile.updateinfo");
     Route::put("password/update" , [ProfileController::class, "changePassword"])->name("profile.updatepass");
+ 
 
+    Route::resource("users" , UsersController::class);
     
 });
 

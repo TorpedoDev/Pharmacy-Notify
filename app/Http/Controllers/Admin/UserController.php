@@ -81,12 +81,12 @@ class UserController extends Controller
            
          $data = $request->validated();
 
-        $msg = $this->checkUsersPerTenant($data["tenant_id"]);
+        // $msg = $this->checkUsersPerTenant($data["tenant_id"]);
 
-        if($msg != null)
-            {
-                return redirect()->back()->with("error" , $msg);
-            }
+        // if($msg != null)
+        //     {
+        //         return redirect()->back()->with("error" , $msg);
+        //     }
 
          $user->update([
             "name" => $data["name"],
