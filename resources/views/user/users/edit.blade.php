@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('user.layout.user')
 @section("title" , __("custom.Edit User"))
 @section("content")
 
@@ -7,7 +7,7 @@
         <nav class="mb-6 flex items-center text-sm" aria-label="Breadcrumb">
             <ol class="flex items-center gap-2">
                 <li>
-                    <a href="{{ route('admin.dashboard') }}"
+                    <a href="{{ route('dashboard') }}"
                        class="font-medium text-slate-500 transition hover:text-indigo-600">
                         {{ __("custom.Dashboard") }}
                     </a>
@@ -16,7 +16,7 @@
                 <li class="text-slate-300">/</li>
 
                 <li>
-                    <a href="{{ route('admin.users.index') }}"
+                    <a href="{{ route('users.index') }}"
                        class="font-medium text-slate-500 transition hover:text-indigo-600">
                         {{ __("custom.Users") }}
                     </a>
@@ -44,7 +44,7 @@
                 </p>
             </div>
 
-            <a href="{{ route('admin.users.index') }}"
+            <a href="{{ route('users.index') }}"
                class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300
                       bg-white px-4 py-2.5 text-sm font-semibold text-slate-700
                       shadow-sm transition hover:bg-slate-50">
@@ -83,7 +83,7 @@
 
 
             {{-- Form --}}
-            <form method="POST" action="{{ route('admin.users.update' , $user) }}">
+            <form method="POST" action="{{ route('users.update' , $user) }}">
                 @csrf
                 @method("PUT")
                 <div class="space-y-6 p-6">
@@ -182,38 +182,7 @@
 
 
 
-                        {{-- tenant_id --}}
-                        <div>
-                            <label for="tenant_id"
-                                   class="mb-2 block text-sm font-semibold text-slate-700">
-                                {{ __("custom.Tenant Name") }}
-                                <span class="text-red-500">*</span>
-                            </label>
 
-                            <select
-                                id="tenant_id"
-                                name="tenant_id"
-                                class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3
-                                       text-sm text-slate-900 outline-none transition
-                                       focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100
-                                       @error('tenant_id') border-red-400 @enderror"
-                            >
-                                <option value="" disabled selected>{{ __("custom.Select Tenant") }}</option>
-
-                                @foreach ($tenants as $tenant)
-                                    <option value="{{ $tenant->id }}"
-                                        @selected($user->tenant_id == $tenant->id)>
-                                        {{ $tenant->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @error('tenant_id')
-                                <p class="mt-1.5 text-sm text-red-600">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
 
                   
                       <div>
@@ -280,7 +249,7 @@
                 <div class="flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50
                             px-6 py-4 sm:flex-row sm:justify-end">
 
-                    <a href="{{ route('admin.users.index') }}"
+                    <a href="{{ route('users.index') }}"
                        class="inline-flex items-center justify-center rounded-lg border
                               border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold
                               text-slate-700 shadow-sm transition hover:bg-slate-100">

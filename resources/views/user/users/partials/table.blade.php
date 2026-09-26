@@ -110,7 +110,7 @@
                                     <div class="flex justify-end gap-2">
 
                                         {{-- Edit --}}
-                                        <a href="{{ route('admin.users.edit', $user) }}"
+                                        <a href="{{ route('users.edit', $user) }}"
                                            title="Edit"
                                            class="inline-flex h-9 w-9 items-center
                                                   justify-center rounded-lg
@@ -156,7 +156,7 @@
                                             @method('DELETE') --}}
 
                                             <button
-                                            data-url="{{ route('admin.users.destroy', $user->id) }}"
+                                            data-url="{{ route('users.destroy', $user->id) }}"
                                             data-name="{{ $user->name }}"
                                                 type="submit"
                                                 title="Delete"
@@ -241,7 +241,7 @@
                                             {{ __("custom.Get started by creating first user.") }}
                                         </p>
 
-                                        <a href="{{ route('admin.users.create') }}"
+                                        <a href="{{ route('users.create') }}"
                                            class="mt-4 inline-flex items-center gap-2
                                                   rounded-lg bg-indigo-600 px-4 py-2
                                                   text-sm font-semibold text-white

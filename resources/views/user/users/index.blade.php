@@ -1,4 +1,4 @@
-@extends("admin.layout.admin")
+@extends("user.layout.user")
 @section("title" , __("custom.All Users"))
 @section("content")
 
@@ -7,7 +7,7 @@
             <ol class="flex items-center gap-2">
 
                 <li>
-                    <a href="{{ route('admin.dashboard') }}"
+                    <a href="{{ route('dashboard') }}"
                        class="font-medium text-slate-500 transition hover:text-indigo-600">
                         {{ __("custom.Dashboard") }}
                     </a>
@@ -37,7 +37,7 @@
             </div>
 
             {{-- Add Button --}}
-            <a href="{{ route('admin.users.create') }}"
+            <a href="{{ route('users.create') }}"
                class="inline-flex items-center justify-center gap-2 rounded-lg
                       bg-[#146356]
                       px-5 py-2.5 text-sm font-semibold text-white
@@ -118,7 +118,7 @@
             </div>
 
             <div id="users-table">
-                @include('admin.users.partials.table')
+                @include('user.users.partials.table')
             </div>
 
             {{-- Table --}}
@@ -158,7 +158,7 @@ $(document).ready(function () {
 
     let searchTimeout;
 
-    function loadSubscriptions(url = "{{ route('admin.users.index') }}") {
+    function loadSubscriptions(url = "{{ route('users.index') }}") {
 
         let search = $('#search').val();
       
