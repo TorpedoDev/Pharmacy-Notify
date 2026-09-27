@@ -20,6 +20,28 @@ Route::middleware("locale")->group(function(){
    Route::get('/', [IndexController::class, "index"] )->name("index");
    Route::get('pharmacy/register', [IndexController::class, "index"] )->name("pharmacy.register");
 
+//    Route::get('/register-pharmacy', [TenantRegistrationController::class, 'createTenant'])
+//     ->name('pharmacy.register');
+
+Route::post('/register-pharmacy', [IndexController::class, 'storeTenant'])
+    ->name('pharmacy.store');
+
+// خطوة 2: ربط الواتساب (لسه من غير تسجيل دخول)
+Route::get('/whatsapp/connect', [IndexController::class, 'showWhatsappEmbedded'])
+    ->name('whatsapp.connect');
+
+Route::post('/whatsapp/embedded-signup', [IndexController::class, 'handleWhatsappEmbedded'])
+    ->name('whatsapp.handle');
+
+
+
+
+
+
+    Route::get('/oauth/whatsapp', function () {
+    return response('OK', 200);
+});
+
 });
 
 // Route::get('/dashboard', function () {

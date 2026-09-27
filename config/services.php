@@ -37,9 +37,9 @@ return [
       
     ],
 
-      'whatsapp' => [
-    'token' => env('META_WHATSAPP_TOKEN'),
-    'phone_id' => env('META_WHATSAPP_PHONE_ID'),
-    'version' => env('META_WHATSAPP_VERSION', 'v21.0'),
-],
+   'meta' => [
+     'app_id' => env("META_APP_ID"),
+     'app_secret' => env("META_APP_SECRET"),
+     'whatsapp_config_id' => env("META_WHATSAPP_CONFIG_ID")
+   ]
 ];

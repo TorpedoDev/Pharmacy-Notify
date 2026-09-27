@@ -2845,7 +2845,7 @@
 
                     <h1 class="max-w-3xl text-5xl font-black leading-[1.05] tracking-tight text-teal-950 md:text-6xl xl:text-7xl">
 
-                        {{ __('landing.hero.title') }}
+                         {{ __('landing.hero.title') }} 
 
                         <span class="text-teal-700">
                             {{ __('landing.hero.title_highlight') }}
@@ -3418,7 +3418,7 @@
                 {{-- This goes directly to your Laravel route --}}
 
                 <form
-                    action="{{ route('pharmacy.register') }}"
+                    action="{{ route('pharmacy.store') }}"
                     method="POST"
                     class="rounded-[2rem] bg-white p-8 shadow-2xl shadow-teal-900/10"
                 >
@@ -3492,12 +3492,29 @@
                         </div>
 
 
+                          <div>
+                            <label class="mb-2 block text-sm font-black text-teal-950">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-teal-700 focus:bg-white focus:ring-4 focus:ring-teal-700/10"
+                            >
+                        </div>
+
                         <button
                             type="submit"
                             class="mt-2 rounded-xl bg-teal-800 px-6 py-4 text-sm font-black text-white shadow-xl shadow-teal-900/20 transition hover:bg-teal-900"
                         >
                             {{ __('landing.cta.button') }}
                         </button>
+
+
+                        {{-- <button type="button" onclick="connectWhatsApp()">
+  Connect WhatsApp
+</button> --}}
 
                     </div>
 
@@ -3614,6 +3631,71 @@
         </svg>
 
     </a>
+
+
+<script>
+window.fbAsyncInit = function () {
+  FB.init({
+    appId: "4567798123501210",
+    cookie: true,
+    xfbml: true,
+    version: "v24.0"
+  });
+};
+
+(function (d, s, id) {
+  if (d.getElementById(id)) return;
+
+  const js = d.createElement(s);
+  js.id = id;
+  js.src = "https://connect.facebook.net/en_US/sdk.js";
+  d.getElementsByTagName(s)[0].parentNode.insertBefore(
+    js,
+    d.getElementsByTagName(s)[0]
+  );
+})(document, "script", "facebook-jssdk");
+
+
+function connectWhatsApp() {
+
+  FB.login(function (response) {
+
+    if (
+      response.status === "connected" &&
+      response.authResponse
+    ) {
+
+      const code = response.authResponse.code;
+
+      // Send this immediately to your backend
+      fetch("/api/whatsapp/embedded-signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          code: code
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        console.log("WhatsApp connected:", data);
+      });
+
+    } else {
+      console.log("WhatsApp signup cancelled");
+    }
+
+  }, {
+    config_id: "YOUR_EMBEDDED_SIGNUP_CONFIG_ID",
+    response_type: "code",
+    override_default_response_type: true,
+    extras: {
+      sessionInfoVersion: "3"
+    }
+  });
+}
+</script>
 
 </body>
 </html>
