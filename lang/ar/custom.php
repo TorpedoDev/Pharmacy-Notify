@@ -455,5 +455,7 @@ return [
     'User' => 'مستخدم',
     'All Features' => 'جميع المميزات',
     'Technical Support' => 'الدعم الفني',
+    'Privacy Policy' => 'سياسة الخصوصية',
+    'Terms' => 'شروط الخدمة'
 
 ];

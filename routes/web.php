@@ -35,7 +35,8 @@ Route::post('/whatsapp/embedded-signup', [IndexController::class, 'handleWhatsap
 
 
 
-
+Route::view("/privacy-policy" , "privacy-policy")->name('privacy-policy');
+Route::view("/terms" , "terms")->name('terms');
 
 
     Route::get('/oauth/whatsapp', function () {

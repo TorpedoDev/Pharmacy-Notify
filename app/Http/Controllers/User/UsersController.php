@@ -96,7 +96,7 @@ $msg = $this->checkUsersPerTenant($data["tenant_id"]);
          ]);
 
          if($request->filled("password"))
-            {
+            {        
                 $user->password = Hash::make($request->password);
                 $user->save();
             }

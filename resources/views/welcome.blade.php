@@ -2771,6 +2771,22 @@
                             {{ __('landing.nav.about') }}
                         </a>
 
+                        <a
+                            href="{{ route('privacy-policy') }}"
+                            class="nav-link text-sm font-bold text-slate-600 transition hover:text-teal-800"
+                        >
+                            {{ __('custom.Privacy Policy') }}
+                        </a>
+
+
+                         <a
+                            href="{{ route('terms') }}"
+                            class="nav-link text-sm font-bold text-slate-600 transition hover:text-teal-800"
+                        >
+                            {{ __('custom.Terms') }}
+                        </a>
+
+
                     </div>
 
                     {{-- Actions --}}

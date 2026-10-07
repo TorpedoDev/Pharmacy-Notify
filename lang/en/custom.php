@@ -455,5 +455,7 @@ return [
     'User' => 'User',
     'All Features' => 'All Features',
     'Technical Support' => 'Technical Support',
+    'Privacy Policy' => 'Privacy Policy',
+    'Terms' => 'Terms',
 
 ];

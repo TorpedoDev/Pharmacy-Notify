@@ -12,15 +12,13 @@ use App\Models\PrescriptionItem;
 use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class PrescriptionController extends Controller
 {
-    private $whatsappService ;
 
-    public function __construct(WhatsAppService $whatsappService)
-    {
-       $this->whatsappService = $whatsappService;
-    }
+   
     /**
      * Display a listing of the resource.
      */
@@ -86,100 +84,243 @@ class PrescriptionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PrescriptionRequest $request)
-    {
-         $tenantId = auth('web')->user()->tenant_id;
+    // public function store(PrescriptionRequest $request)
+    // {
+    //      $tenantId = auth('web')->user()->tenant_id;
 
-        $validated = $request->validated();
+    //     $validated = $request->validated();
        
-        $patient = Patient::query()
-            ->where('tenant_id', $tenantId)
-            ->findOrFail($validated['patient_id']);
+    //     $patient = Patient::query()
+    //         ->where('tenant_id', $tenantId)
+    //         ->findOrFail($validated['patient_id']);
 
-        /*
-         * Make sure all medications belong to current tenant.
-         */
-        $medicationIds = collect($validated['items'])
-            ->pluck('medication_id')
-            ->unique();
+    //     /*
+    //      * Make sure all medications belong to current tenant.
+    //      */
+    //     $medicationIds = collect($validated['items'])
+    //         ->pluck('medication_id')
+    //         ->unique();
 
-        $validMedicationCount = Medication::query()
-            ->where('tenant_id', $tenantId)
-            ->whereIn('id', $medicationIds)
-            ->count();
+    //     $validMedicationCount = Medication::query()
+    //         ->where('tenant_id', $tenantId)
+    //         ->whereIn('id', $medicationIds)
+    //         ->count();
 
-        if ($validMedicationCount !== $medicationIds->count()) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'items' => __('custom.One or more selected medications are invalid.')
-                ]);
-        }
+    //     if ($validMedicationCount !== $medicationIds->count()) {
+    //         return back()
+    //             ->withInput()
+    //             ->withErrors([
+    //                 'items' => __('custom.One or more selected medications are invalid.')
+    //             ]);
+    //     }
 
-        $prescription = DB::transaction(function () use (
-            $validated,
-            $tenantId
-        ) {
-            $prescription = Prescription::create([
-                'tenant_id' => $tenantId,
-                'patient_id' => $validated['patient_id'],
-                'prescription_name' => $validated['prescription_name'],
-                'prescription_date' => $validated['prescription_date'],
-                'status' => 'pending',
-                'created_by' => auth('web')->id(),
-            ]);
+    //     $prescription = DB::transaction(function () use (
+    //         $validated,
+    //         $tenantId
+    //     ) {
+    //         $prescription = Prescription::create([
+    //             'tenant_id' => $tenantId,
+    //             'patient_id' => $validated['patient_id'],
+    //             'prescription_name' => $validated['prescription_name'],
+    //             'prescription_date' => $validated['prescription_date'],
+    //             'status' => 'pending',
+    //             'created_by' => auth('web')->id(),
+    //         ]);
 
-            foreach ($validated['items'] as $item) {
+    //         foreach ($validated['items'] as $item) {
 
-                $prescriptionItem = $prescription->items()->create([
-                    'medication_id' => $item['medication_id'],
-                    'dosage' => $item['dosage'],
-                    'frequency' => $item['frequency'],
-                    'duration_value' => $item['duration_value'] ?? null,
-                    'duration_unit' => $item['duration_unit'] ?? null,
-                    'prescribed_quantity' => $item['prescribed_quantity'],
-                    'is_chronic' => $item['is_chronic'] ?? false,
-                    'refill_enabled' => $item['refill_enabled'] ?? false,
-                    'refill_cycle_days' => $item['refill_cycle_days'] ?? null,
-                ]);
+    //             $prescriptionItem = $prescription->items()->create([
+    //                 'medication_id' => $item['medication_id'],
+    //                 'dosage' => $item['dosage'],
+    //                 'frequency' => $item['frequency'],
+    //                 'duration_value' => $item['duration_value'] ?? null,
+    //                 'duration_unit' => $item['duration_unit'] ?? null,
+    //                 'prescribed_quantity' => $item['prescribed_quantity'],
+    //                 'is_chronic' => $item['is_chronic'] ?? false,
+    //                 'refill_enabled' => $item['refill_enabled'] ?? false,
+    //                 'refill_cycle_days' => $item['refill_cycle_days'] ?? null,
+    //             ]);
 
-                /*
-                 * Create Patient Treatment for chronic medication.
-                 */
-                if ($prescriptionItem->is_chronic) {
-                    $this->createPatientTreatment(
-                        $prescription,
-                        $prescriptionItem
-                    );
-                }
-            }
-             return $prescription;
-        });
+    //             /*
+    //              * Create Patient Treatment for chronic medication.
+    //              */
+    //             if ($prescriptionItem->is_chronic) {
+    //                 $this->createPatientTreatment(
+    //                     $prescription,
+    //                     $prescriptionItem
+    //                 );
+    //             }
+    //         }
+    //          return $prescription;
+    //     });
 
-       $medicines = $prescription->items()
-    ->with('medication')
-    ->get()
-    ->toArray();
+    //    $medicines = $prescription->items()
+    // ->with('medication')
+    // ->get()
+    // ->toArray();
  
-    // dd($medicines);
+    // // dd($medicines);
 
-        $response = $this->whatsappService->sendPrescription(
-        // to: '201096946204',
-        to: '01064206769',
-        pharmacyName: 'صيدلية فايز',
-        clientName: 'عمرو الحلفاوي',
-        medicines: $medicines
-    );
+    //     $response = $this->whatsappService->sendPrescription(
+    //     // to: '201096946204',
+    //     to: '01064206769',
+    //     pharmacyName: 'صيدلية فايز',
+    //     clientName: 'عمرو الحلفاوي',
+    //     medicines: $medicines
+    // );
         
 
-        return redirect()
-            ->route('prescriptions.index')
-            ->with(
-                'success',
-                __('custom.Prescription created successfully.')
+    //     return redirect()
+    //         ->route('prescriptions.index')
+    //         ->with(
+    //             'success',
+    //             __('custom.Prescription created successfully.')
+    //         );
+
+    // }
+
+
+
+public function store(PrescriptionRequest $request)
+{
+    $user     = auth('web')->user();
+    $tenantId = $user->tenant_id;
+    $tenant   = $user->tenant; // عدّل لو العلاقة اسمها مختلف: Tenant::findOrFail($tenantId)
+
+    $validated = $request->validated();
+
+    $patient = Patient::query()
+        ->where('tenant_id', $tenantId)
+        ->findOrFail($validated['patient_id']);
+
+    /*
+     * Make sure all medications belong to current tenant.
+     */
+    $medicationIds = collect($validated['items'])
+        ->pluck('medication_id')
+        ->unique();
+
+    $validMedicationCount = Medication::query()
+        ->where('tenant_id', $tenantId)
+        ->whereIn('id', $medicationIds)
+        ->count();
+
+    if ($validMedicationCount !== $medicationIds->count()) {
+        return back()
+            ->withInput()
+            ->withErrors([
+                'items' => __('custom.One or more selected medications are invalid.')
+            ]);
+    }
+
+    $prescription = DB::transaction(function () use ($validated, $tenantId) {
+        $prescription = Prescription::create([
+            'tenant_id'         => $tenantId,
+            'patient_id'        => $validated['patient_id'],
+            'prescription_name' => $validated['prescription_name'],
+            'prescription_date' => $validated['prescription_date'],
+            'status'            => 'pending',
+            'created_by'        => auth('web')->id(),
+        ]);
+
+        foreach ($validated['items'] as $item) {
+            $prescriptionItem = $prescription->items()->create([
+                'medication_id'       => $item['medication_id'],
+                'dosage'              => $item['dosage'],
+                'frequency'           => $item['frequency'],
+                'duration_value'      => $item['duration_value'] ?? null,
+                'duration_unit'       => $item['duration_unit'] ?? null,
+                'prescribed_quantity' => $item['prescribed_quantity'],
+                'is_chronic'          => $item['is_chronic'] ?? false,
+                'refill_enabled'      => $item['refill_enabled'] ?? false,
+                'refill_cycle_days'   => $item['refill_cycle_days'] ?? null,
+            ]);
+
+            /*
+             * Create Patient Treatment for chronic medication.
+             */
+            if ($prescriptionItem->is_chronic) {
+                $this->createPatientTreatment($prescription, $prescriptionItem);
+            }
+        }
+
+        return $prescription;
+    });
+
+    /*
+     * Send WhatsApp message from the pharmacy's own number.
+     * فشل الإرسال ما يلغيش الروشتة اللي اتحفظت.
+     */
+    $whatsappWarning = null;
+
+    if (empty($tenant->whatsapp_access_token) || empty($tenant->whatsapp_phone_number_id)) {
+        $whatsappWarning = 'الصيدلية غير مربوطة بواتساب، لم يتم إرسال الرسالة';
+    } elseif (empty($patient->phone)) { // عدّل اسم عمود رقم المريض
+        $whatsappWarning = 'لا يوجد رقم هاتف للمريض، لم يتم إرسال الرسالة';
+    } else {
+        try {
+            $medicines = $prescription->items()
+                ->with('medication')
+                ->get()
+                ->toArray();
+
+            $result = WhatsAppService::forTenant($tenant)->sendPrescription(
+                to: $this->normalizePhone($patient->phone),
+                pharmacyName: $tenant->name,   // عدّل اسم عمود اسم الصيدلية
+                clientName: $patient->name,    // عدّل اسم عمود اسم المريض
+                medicines: $medicines
             );
 
+            if (! isset($result['messages'][0]['id'])) {
+                Log::warning('WhatsApp prescription not sent', [
+                    'prescription_id' => $prescription->id,
+                    'response'        => $result,
+                ]);
+                $whatsappWarning = 'تم حفظ الروشتة لكن فشل إرسال رسالة الواتساب';
+            }
+        } catch (Throwable $e) {
+            report($e);
+            $whatsappWarning = 'تم حفظ الروشتة لكن فشل إرسال رسالة الواتساب';
+        }
     }
+
+    $redirect = redirect()
+        ->route('prescriptions.index')
+        ->with('success', __('custom.Prescription created successfully.'));
+
+    if ($whatsappWarning) {
+        $redirect->with('warning', $whatsappWarning);
+    }
+
+    return $redirect;
+}
+
+/**
+ * يحوّل الرقم للصيغة الدولية بدون + (مثال: 01064206769 => 201064206769)
+ */
+private function normalizePhone(string $phone, string $defaultCountryCode = '20'): string
+{
+    $digits = preg_replace('/\D/', '', $phone);
+
+    if (str_starts_with($digits, '00')) {
+        return substr($digits, 2);
+    }
+
+    if (str_starts_with($digits, '0')) {
+        return $defaultCountryCode . substr($digits, 1);
+    }
+
+    return $digits;
+}
+
+
+
+
+
+
+
+
+
 
     /**
      * Display the specified resource.
