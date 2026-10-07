@@ -457,5 +457,6 @@ return [
     'Technical Support' => 'Technical Support',
     'Privacy Policy' => 'Privacy Policy',
     'Terms' => 'Terms',
+    'Data Deletion' => 'Data Deletion'
 
 ];

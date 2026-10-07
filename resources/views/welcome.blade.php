@@ -2786,6 +2786,13 @@
                             {{ __('custom.Terms') }}
                         </a>
 
+                         <a
+                            href="{{ route('data-deletion') }}"
+                            class="nav-link text-sm font-bold text-slate-600 transition hover:text-teal-800"
+                        >
+                            {{ __('custom.Data Deletion') }}
+                        </a>
+
 
                     </div>
 

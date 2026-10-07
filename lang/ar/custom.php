@@ -456,6 +456,7 @@ return [
     'All Features' => 'جميع المميزات',
     'Technical Support' => 'الدعم الفني',
     'Privacy Policy' => 'سياسة الخصوصية',
-    'Terms' => 'شروط الخدمة'
+    'Terms' => 'شروط الخدمة',
+    'Data Deletion' => 'حذف البيانات'
 
 ];
